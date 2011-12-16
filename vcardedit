@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+"""
+@author: Aurélien Gâteau <aurelien.gateau@free.fr>
+@license: GPL v3 or later
+"""
 import sys
 from optparse import OptionParser
 
