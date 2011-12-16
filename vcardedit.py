@@ -35,6 +35,19 @@ def act_edit(card):
         card.n.value.family = lastname
         card.fn.value = "%s %s" % (firstname, lastname)
 
+def act_clean_phones(card):
+    if not "tel" in card.contents:
+        return True
+
+    for tel in card.tel_list:
+        value = tel.value
+        value = value.replace("-", "")
+        if value[0] == "0" and value[1] in "123456":
+            value = "+33" + value[1:]
+        tel.value = value
+
+    return True
+
 def act_title(card):
     firstname = card.n.value.given.title()
     lastname = card.n.value.family.title()
