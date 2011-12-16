@@ -13,7 +13,13 @@ vobject: http://vobject.skyhouseconsulting.com/
 
 # License
 
-GPLv3
+GPL v3 or later
+
+# Usage
+
+    vcardedit <action> <in.vcf> <out.vcf>
+
+Run it as `vcardedit --help` for more details.
 
 # Author
 
