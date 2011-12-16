@@ -35,16 +35,28 @@ def act_edit(card):
         card.n.value.family = lastname
         card.fn.value = "%s %s" % (firstname, lastname)
 
-def act_clean_phones(card):
+def act_clean_fr_phones(card):
     if not "tel" in card.contents:
         return True
 
     for tel in card.tel_list:
+        print "%s params=%s:" % (tel.value, repr(tel.params))
         value = tel.value
-        value = value.replace("-", "")
+
+        if "-" in value:
+            print "- Removing '-'"
+            value = value.replace("-", "")
         if value[0] == "0" and value[1] in "123456":
+            print "- Turning leading 0 in +33"
             value = "+33" + value[1:]
+        if value.startswith("+336") and not u"CELL" in tel.params["TYPE"]:
+            print "- Marking as a cellphone"
+            if u"VOICE" in tel.params["TYPE"]:
+                tel.params["TYPE"].remove(u"VOICE")
+            tel.params["TYPE"].append(u"CELL")
         tel.value = value
+
+        print "  => %s params=%s:" % (tel.value, repr(tel.params))
 
     return True
 
