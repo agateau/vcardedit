@@ -69,14 +69,13 @@ def main():
 
     for card in vobject.readComponents(src_file):
         if not "fn" in card.contents:
-            print "no FN in", card, "skipping"
+            print "no FN in", card, "discarding"
             continue
         keep = action(card)
         if keep:
             dst_file.write(card.serialize())
             dst_file.write("\r\n")
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())
