@@ -65,14 +65,18 @@ def act_clean_fr_phones(card):
 
     return True
 
+
 def act_title(card):
     firstname = card.n.value.given.title()
     lastname = card.n.value.family.title()
-
-    card.fn.value = "%s %s" % (firstname, lastname)
     card.n.value.given = firstname
     card.n.value.family = lastname
+
+    lst = [card.n.value.prefix, lastname, firstname, card.n.value.additional, card.n.value.suffix]
+    fn = " ".join([x for x in lst if x])
+    card.fn.value = fn
     return True
+
 
 USAGE="""%%prog <action> <in.vcf> <out.vcf>
 
