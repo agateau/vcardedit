@@ -4,6 +4,7 @@
 @author: Aurélien Gâteau <aurelien.gateau@free.fr>
 @license: GPL v3 or later
 """
+import os
 import sys
 from argparse import ArgumentParser
 
@@ -82,14 +83,18 @@ def main():
     parser = ArgumentParser()
     parser.add_argument("action", choices=get_action_list(), help="Action to perform")
     parser.add_argument("in_vcf", help="Input file")
-    parser.add_argument("out_vcf", help="Output file")
+    parser.add_argument("out_vcf", help="Output file", nargs='?')
 
     args = parser.parse_args()
 
     action = eval("act_" + args.action)
 
     src_file = open(args.in_vcf)
-    dst_file = open(args.out_vcf, "w")
+
+    out_vcf = args.out_vcf
+    if not out_vcf:
+        out_vcf = args.in_vcf + '.new'
+    dst_file = open(out_vcf, "w")
 
     for card in vobject.readComponents(src_file):
         if not "fn" in card.contents:
@@ -101,6 +106,9 @@ def main():
                 del card.fn_list[-1]
             dst_file.write(card.serialize())
             dst_file.write("\r\n")
+
+    if not args.out_vcf:
+        os.rename(out_vcf, args.in_vcf)
     return 0
 
 if __name__ == "__main__":
