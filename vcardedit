@@ -21,7 +21,7 @@ def act_edit(card):
         lastname = card.n.value.family
 
         print ""
-        print u"First name: %s, Last name: %s" % (firstname, lastname)
+        print u"First name: %s, Last name: %s, fn: %s" % (firstname, lastname, card.fn.value)
         answer = tui.editLine(None, prompt="Edit, Swap, Delete, Validate: (esdV) ").lower()
         if answer == "e":
             firstname = tui.editLine(firstname, prompt="First name: ")
