@@ -103,6 +103,8 @@ def main():
             continue
         keep = action(card)
         if keep:
+            while len(card.fn_list) > 1:
+                del card.fn_list[-1]
             dst_file.write(card.serialize())
             dst_file.write("\r\n")
     return 0
