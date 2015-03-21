@@ -81,6 +81,7 @@ def act_title(card):
 
 def main():
     parser = ArgumentParser()
+    parser.add_argument("-f", "--filter", help="Only edit cards whose FN contains TEXT", metavar="TEXT")
     parser.add_argument("action", choices=get_action_list(), help="Action to perform")
     parser.add_argument("in_vcf", help="Input file")
     parser.add_argument("out_vcf", help="Output file", nargs='?')
@@ -100,7 +101,10 @@ def main():
         if not "fn" in card.contents:
             print "no FN in", card, "discarding"
             continue
-        keep = action(card)
+        if args.filter and not args.filter in card.fn.value.lower():
+            keep = True
+        else:
+            keep = action(card)
         if keep:
             while len(card.fn_list) > 1:
                 del card.fn_list[-1]
