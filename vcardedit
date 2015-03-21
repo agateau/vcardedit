@@ -5,7 +5,7 @@
 @license: GPL v3 or later
 """
 import sys
-from optparse import OptionParser
+from argparse import ArgumentParser
 
 import vobject
 
@@ -78,28 +78,18 @@ def act_title(card):
     return True
 
 
-USAGE="""%%prog <action> <in.vcf> <out.vcf>
-
-Where action can be one of: %s
-""" % ", ".join(get_action_list())
-
 def main():
-    parser = OptionParser(usage=USAGE)
+    parser = ArgumentParser()
+    parser.add_argument("action", choices=get_action_list(), help="Action to perform")
+    parser.add_argument("in_vcf", help="Input file")
+    parser.add_argument("out_vcf", help="Output file")
 
-    (options, args) = parser.parse_args()
+    args = parser.parse_args()
 
-    if len(args) != 3:
-        parser.error("Wrong number of arguments")
+    action = eval("act_" + args.action)
 
-    action_name, src, dst = args
-
-    if not action_name in get_action_list():
-        parser.error("Unknown action '%s'" % action_name)
-
-    action = eval("act_" + action_name)
-
-    src_file = open(src)
-    dst_file = open(dst, "w")
+    src_file = open(args.in_vcf)
+    dst_file = open(args.out_vcf, "w")
 
     for card in vobject.readComponents(src_file):
         if not "fn" in card.contents:
