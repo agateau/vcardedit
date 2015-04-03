@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 """
-@author: Aurélien Gâteau <aurelien.gateau@free.fr>
+@author: Aurélien Gâteau <mail@agateau.com>
 @license: GPL v3 or later
 """
 import os
@@ -39,7 +39,14 @@ def act_edit(card):
         # We reach this point if a change was made
         card.n.value.given = firstname
         card.n.value.family = lastname
-        card.fn.value = "%s %s" % (firstname, lastname)
+        update_fn(card)
+
+
+def update_fn(card):
+    lst = [card.n.value.prefix, card.n.value.given, card.n.value.family, card.n.value.additional, card.n.value.suffix]
+    fn = " ".join([x for x in lst if x])
+    card.fn.value = fn
+
 
 def act_clean_fr_phones(card):
     if not "tel" in card.contents:
@@ -73,9 +80,7 @@ def act_title(card):
     card.n.value.given = firstname
     card.n.value.family = lastname
 
-    lst = [card.n.value.prefix, lastname, firstname, card.n.value.additional, card.n.value.suffix]
-    fn = " ".join([x for x in lst if x])
-    card.fn.value = fn
+    update_fn(card)
     return True
 
 
